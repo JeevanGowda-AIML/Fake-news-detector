@@ -1,5 +1,6 @@
 # 🛡️ Misinformation & Fake News Detection Expert System
 
+[![Live Demo](https://img.shields.io/badge/Live%20App-truth--guard--ai.streamlit.app-00F0FF?style=for-the-badge&logo=streamlit&logoColor=black)](https://truth-guard-ai.streamlit.app/)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.3%2B-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
@@ -7,6 +8,8 @@
 [![Accuracy](https://img.shields.io/badge/Test%20Accuracy-99.40%25-brightgreen)](model/metrics.json)
 
 An end-to-end Machine Learning and Natural Language Processing (NLP) system designed to detect and classify news articles across multi-class nuances: **REAL**, **FAKE**, **MISLEADING / PARTIALLY TRUE**, and **REAL (Debunk)**.
+
+> 🚀 **Live Demo:** Access the live interactive web dashboard at **[https://truth-guard-ai.streamlit.app/](https://truth-guard-ai.streamlit.app/)**
 
 ---
 
