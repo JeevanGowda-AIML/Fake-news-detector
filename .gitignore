@@ -35,6 +35,7 @@ run.ps1
 .streamlit/
 .idea/
 .vscode/
+.devcontainer/
 
 # OS-Specific Files
 .DS_Store
