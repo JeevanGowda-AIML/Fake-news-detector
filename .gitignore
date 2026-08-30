@@ -1,0 +1,41 @@
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Large Datasets (> 100MB GitHub limit)
+data/Fake.csv
+data/True.csv
+data/fake_or_real_news.csv
+
+# Heavy Model Binaries (Keep serialized model.pkl)
+*.bin
+*.h5
+*.onnx
+bert_model/
+
+# Local Startup Scripts (Kept local as requested)
+run.bat
+run.ps1
+
+# Secrets & Environment Variables
+.env
+.env.*
+*.pem
+*.key
+
+# Streamlit Cache & Local Temp
+.streamlit/
+.idea/
+.vscode/
+
+# OS-Specific Files
+.DS_Store
+Thumbs.db
