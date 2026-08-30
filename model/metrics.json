@@ -1,0 +1,61 @@
+{
+  "accuracy": 0.994,
+  "precision": 0.9958,
+  "recall": 0.9958,
+  "f1_score": 0.9958,
+  "macro_precision": 0.9958,
+  "macro_recall": 0.9958,
+  "macro_f1": 0.9958,
+  "class_metrics": {
+    "FAKE": {
+      "precision": 0.993,
+      "recall": 0.9938,
+      "f1_score": 0.9934
+    },
+    "MISLEADING": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    "REAL": {
+      "precision": 0.9943,
+      "recall": 0.9935,
+      "f1_score": 0.9939
+    }
+  },
+  "cv_5fold_accuracy_mean": 0.9934,
+  "cv_5fold_accuracy_std": 0.0008,
+  "cv_5fold_precision_mean": 0.9949,
+  "cv_5fold_recall_mean": 0.9947,
+  "cv_5fold_f1_mean": 0.9948,
+  "confusion_matrix": [
+    [
+      4667,
+      0,
+      29
+    ],
+    [
+      0,
+      500,
+      0
+    ],
+    [
+      33,
+      0,
+      5051
+    ]
+  ],
+  "unique_labels": [
+    "FAKE",
+    "MISLEADING",
+    "REAL"
+  ],
+  "balanced_class_weights": {
+    "FAKE": 0.7296,
+    "MISLEADING": 6.853,
+    "REAL": 0.6741
+  },
+  "total_samples": 51398,
+  "train_samples": 41118,
+  "test_samples": 10280
+}
