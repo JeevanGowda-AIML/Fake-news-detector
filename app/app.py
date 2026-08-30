@@ -22,10 +22,13 @@ from model.evaluate import (
     create_performance_summary_fig
 )
 
+# Custom Logo Favicon Path
+LOGO_PATH = os.path.join(BASE_DIR, "app", "assets", "logo.png")
+
 # Streamlit Page Configuration
 st.set_page_config(
-    page_title="AI TruthGuard — Fake News & Fact-Check Classifier",
-    page_icon="🛡️",
+    page_title="TruthGuard AI — Fake News & Misinformation Classifier",
+    page_icon=LOGO_PATH if os.path.exists(LOGO_PATH) else "⚡",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -684,17 +687,27 @@ predictor = get_predictor()
 # SIDEBAR (Stitch Screen 1, 2 & 3 Matching)
 # ==============================================================================
 with st.sidebar:
-    # 3D Shield Brand Logo
+    # 3D Glowing Cyber-Shield Brand Logo
     st.markdown("""
     <div class="brand-container">
         <div class="brand-shield">
-            <svg viewBox="0 0 24 24">
-                <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z"/>
-                <path d="M12 6v12M8 11l4 4 4-4" stroke-linecap="round"/>
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="cyberGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00F0FF" />
+                        <stop offset="50%" stop-color="#A855F7" />
+                        <stop offset="100%" stop-color="#EC4899" />
+                    </linearGradient>
+                </defs>
+                <circle cx="20" cy="20" r="18" stroke="url(#cyberGlow)" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.8"/>
+                <path d="M20 5L33 11V21C33 28.5 27.5 34.5 20 37C12.5 34.5 7 28.5 7 21V11L20 5Z" fill="rgba(15, 7, 34, 0.9)" stroke="url(#cyberGlow)" stroke-width="2"/>
+                <path d="M20 9L29 13.5V20.5C29 25.5 25.2 29.8 20 31.8C14.8 29.8 11 25.5 11 20.5V13.5L20 9Z" fill="rgba(38, 16, 77, 0.5)" stroke="#A855F7" stroke-width="1.2"/>
+                <circle cx="20" cy="19" r="4" fill="#00F0FF"/>
+                <path d="M18 19L19.5 20.5L22.5 17.5" stroke="#090314" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </div>
-        <div class="brand-title">AI TruthGuard</div>
-        <div class="brand-subtitle">NLP FACT-CHECKING ENGINE</div>
+        <div class="brand-title">TRUTH<span style="color:#00F0FF;">GUARD</span> <span style="font-size:0.85rem; vertical-align:super; color:#A855F7;">AI</span></div>
+        <div class="brand-subtitle">NEURAL FACT-CHECK ENGINE</div>
     </div>
     <hr style="border: 0; height: 1px; background: rgba(168, 85, 247, 0.2); margin: 0 0 16px 0;">
     """, unsafe_allow_html=True)
