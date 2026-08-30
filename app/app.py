@@ -22,13 +22,10 @@ from model.evaluate import (
     create_performance_summary_fig
 )
 
-# Custom Logo Favicon Path
-LOGO_PATH = os.path.join(BASE_DIR, "app", "assets", "logo.png")
-
 # Streamlit Page Configuration
 st.set_page_config(
     page_title="TruthGuard AI — Fake News & Misinformation Classifier",
-    page_icon=LOGO_PATH if os.path.exists(LOGO_PATH) else "⚡",
+    page_icon="💠",
     layout="wide",
     initial_sidebar_state="expanded"
 )

@@ -106,12 +106,14 @@ Fake news detection/
 ## ⚡ Quick Start Guide
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/<YOUR-USERNAME>/fake-news-detection.git
 cd fake-news-detection
 ```
 
 ### 2. Set Up Virtual Environment & Install Dependencies
+
 ```bash
 # Create virtual environment
 python -m venv .venv
@@ -127,12 +129,14 @@ pip install -r requirements.txt
 ```
 
 ### 3. Launch the Application
+
 ```bash
 # Option A: Double-click run.bat (Windows)
 
 # Option B: Run via Streamlit command
 streamlit run app/app.py
 ```
+
 Open **[http://localhost:8501](http://localhost:8501)** in your browser.
 
 ---
@@ -141,21 +145,21 @@ Open **[http://localhost:8501](http://localhost:8501)** in your browser.
 
 Evaluated on a balanced **51,398-article multi-domain dataset** (ISOT, Reuters, Science/Tech, Economics, Health):
 
-| Metric | Score | Definition |
-| :--- | :---: | :--- |
-| ⚡ **Global Accuracy** | **`99.40%`** | Total correct predictions across 10,280 holdout samples |
-| 🎯 **Macro Precision** | **`99.58%`** | Purity of positive detections across each category |
-| 🔄 **Macro Recall** | **`99.58%`** | True positive catch rate across deceptive & nuanced claims |
-| 📊 **Macro F1-Score** | **`99.58%`** | Harmonic balance across minority & majority classes |
+| Metric                 |    Score     | Definition                                                 |
+| :--------------------- | :----------: | :--------------------------------------------------------- |
+| ⚡ **Global Accuracy** | **`99.40%`** | Total correct predictions across 10,280 holdout samples    |
+| 🎯 **Macro Precision** | **`99.58%`** | Purity of positive detections across each category         |
+| 🔄 **Macro Recall**    | **`99.58%`** | True positive catch rate across deceptive & nuanced claims |
+| 📊 **Macro F1-Score**  | **`99.58%`** | Harmonic balance across minority & majority classes        |
 
 ### Multi-Class Confusion Matrix (Predicted vs Actual):
 
-| Actual Label \ Predicted Label | FAKE | MISLEADING | REAL (Debunk) | REAL |
-| :--- | :---: | :---: | :---: | :---: |
-| **REAL** | 52 | 12 | 18 | **4,850** |
-| **REAL (Debunk)** | 15 | 8 | **380** | 25 |
-| **MISLEADING** | 18 | **475** | 4 | 12 |
-| **FAKE** | **4,580** | 16 | 2 | 48 |
+| Actual Label \ Predicted Label |   FAKE    | MISLEADING | REAL (Debunk) |   REAL    |
+| :----------------------------- | :-------: | :--------: | :-----------: | :-------: |
+| **REAL**                       |    52     |     12     |      18       | **4,850** |
+| **REAL (Debunk)**              |    15     |     8      |    **380**    |    25     |
+| **MISLEADING**                 |    18     |  **475**   |       4       |    12     |
+| **FAKE**                       | **4,580** |     16     |       2       |    48     |
 
 ---
 
@@ -182,4 +186,5 @@ Evaluated on a balanced **51,398-article multi-domain dataset** (ISOT, Reuters, 
 ---
 
 ## 📜 License
+
 Distributed under the MIT License. See `LICENSE` for more information.
