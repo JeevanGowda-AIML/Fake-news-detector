@@ -148,15 +148,14 @@ Evaluated on a balanced **51,398-article multi-domain dataset** (ISOT, Reuters, 
 | 🔄 **Macro Recall** | **`99.58%`** | True positive catch rate across deceptive & nuanced claims |
 | 📊 **Macro F1-Score** | **`99.58%`** | Harmonic balance across minority & majority classes |
 
-### Multi-Class Confusion Matrix:
-$$\begin{array}{r|cccc}
-\textbf{Actual \textbackslash Predicted} & \textbf{FAKE} & \textbf{MISLEADING} & \textbf{REAL (Debunk)} & \textbf{REAL} \\
-\hline
-\textbf{REAL} & 52 & 12 & 18 & \mathbf{4,850} \\
-\textbf{REAL (Debunk)} & 15 & 8 & \mathbf{380} & 25 \\
-\textbf{MISLEADING} & 18 & \mathbf{475} & 4 & 12 \\
-\textbf{FAKE} & \mathbf{4,580} & 16 & 2 & 48 \\
-\end{array}$$
+### Multi-Class Confusion Matrix (Predicted vs Actual):
+
+| Actual Label \ Predicted Label | FAKE | MISLEADING | REAL (Debunk) | REAL |
+| :--- | :---: | :---: | :---: | :---: |
+| **REAL** | 52 | 12 | 18 | **4,850** |
+| **REAL (Debunk)** | 15 | 8 | **380** | 25 |
+| **MISLEADING** | 18 | **475** | 4 | 12 |
+| **FAKE** | **4,580** | 16 | 2 | 48 |
 
 ---
 
