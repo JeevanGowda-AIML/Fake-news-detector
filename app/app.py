@@ -11,7 +11,21 @@ if BASE_DIR not in sys.path:
 
 import importlib
 import model.evaluate
+import model.predict
+import utils.claim_extractor
+import utils.knowledge_base
+import utils.preprocess
+import utils.source_credibility
+import utils.stylometry
+
 importlib.reload(model.evaluate)
+importlib.reload(utils.claim_extractor)
+importlib.reload(utils.knowledge_base)
+importlib.reload(utils.preprocess)
+importlib.reload(utils.source_credibility)
+importlib.reload(utils.stylometry)
+importlib.reload(model.predict)
+
 from model.predict import FakeNewsPredictor
 from model.evaluate import (
     load_metrics, 
@@ -672,16 +686,16 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Initialize Predictor
-@st.cache_resource(show_spinner="Initializing AI TruthGuard Engine...")
-def get_predictor():
+# Initialize Predictor with cache-busting version token
+@st.cache_resource(show_spinner="Initializing TruthGuard AI Engine...")
+def get_predictor(_version: str = "v5.0_accurate_boundaries"):
     try:
         return FakeNewsPredictor()
     except Exception as e:
         st.error(f"Error loading model: {e}")
         return None
 
-predictor = get_predictor()
+predictor = get_predictor("v5.0_accurate_boundaries")
 
 # ==============================================================================
 # SIDEBAR (Stitch Screen 1, 2 & 3 Matching)
