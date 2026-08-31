@@ -461,19 +461,22 @@ st.markdown("""
         margin: 10px 0 20px 0;
         letter-spacing: -0.3px;
     }
-    .classifier-card-wrapper {
-        background: linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #EC4899 100%);
-        padding: 1.5px;
-        border-radius: 22px;
-        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(168, 85, 247, 0.25);
-        margin-bottom: 24px;
+    /* Main Classifier Form Container with Glassmorphism & Neon Glow */
+    div[data-testid="stForm"] {
+        background: rgba(18, 9, 38, 0.92) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border: 1.5px solid rgba(168, 85, 247, 0.45) !important;
+        border-radius: 20px !important;
+        padding: 24px 28px !important;
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(168, 85, 247, 0.25) !important;
+        margin-top: 14px !important;
+        margin-bottom: 24px !important;
+        transition: all 0.3s ease !important;
     }
-    .classifier-card-inner {
-        background: rgba(18, 9, 38, 0.92);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-radius: 21px;
-        padding: 28px 32px;
+    div[data-testid="stForm"]:focus-within {
+        border-color: #00F0FF !important;
+        box-shadow: 0 0 30px rgba(0, 240, 255, 0.35), 0 15px 45px rgba(0, 0, 0, 0.6) !important;
     }
 
     /* Custom Form Labels & Inputs */
@@ -827,9 +830,7 @@ if page == "Single Article Classifier":
         )
     )
 
-    # Main Glassmorphism Form Container with Dual-Gradient Border
-    st.markdown("<div class='classifier-card-wrapper'><div class='classifier-card-inner'>", unsafe_allow_html=True)
-    
+    # Main Form Input
     with st.form("single_classify_form"):
         st.markdown("<div class='custom-label'>Article Headline / Title (Optional)</div>", unsafe_allow_html=True)
         headline_input = st.text_input(
@@ -849,8 +850,6 @@ if page == "Single Article Classifier":
         )
 
         submitted = st.form_submit_button("▶ Run Fact-Check Analysis")
-
-    st.markdown("</div></div>", unsafe_allow_html=True)
 
     # Check if form was submitted manually OR triggered by a preset button
     should_predict = submitted or st.session_state.get('trigger_prediction', False)
@@ -1070,14 +1069,16 @@ elif page == "Batch CSV Predictor":
     file_name = None
     error_msg = None
 
-    # Main Glassmorphism Dropzone Card (Screen 2 Exact Match)
+    # Main Glassmorphism Dropzone Header
     st.markdown("""
     <div class="batch-card-wrapper">
         <div class="batch-card-inner">
-            <div class="batch-upload-pill-btn">Upload CSV</div>
+            <div class="batch-upload-pill-btn">Upload CSV Dataset</div>
             <div class="batch-subtitle-text">
-                <span class="batch-subtitle-highlight">Drag and drop or click to browse.</span> 200MB per file • CSV only
+                <span class="batch-subtitle-highlight">Drag and drop or click to browse.</span> 200MB per file • CSV / TSV format
             </div>
+        </div>
+    </div>
     """, unsafe_allow_html=True)
 
     uploaded_file = st.file_uploader(
@@ -1122,13 +1123,10 @@ elif page == "Batch CSV Predictor":
     else:
         st.markdown("""
         <div class="status-pills-row">
-            <div class="status-pill-green">● Processing: 45% - data_batch_01.csv</div>
-            <div class="status-pill-green">● Completed: 12 files</div>
-            <div class="status-pill-red">● Errors: 2 files</div>
+            <div class="status-pill-green">● Ready for upload: data_batch.csv</div>
+            <div class="status-pill-green">● Multi-Class Decision Pipeline Active</div>
         </div>
         """, unsafe_allow_html=True)
-
-    st.markdown("</div></div>", unsafe_allow_html=True)
 
     if error_msg:
         st.error(error_msg)
