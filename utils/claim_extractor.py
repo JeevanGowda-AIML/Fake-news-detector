@@ -12,9 +12,9 @@ _init_sent_tokenizer()
 
 # Specific regex patterns for claim statements
 CLAIM_PATTERNS = [
-    r'\b(?:allegedly|it is claimed that|rumored that|sources claim|unverified reports?|conspiracy to|whistleblower claims|secretly planned)\b',
+    r'\b(?:allegedly|it is claimed that|rumored that|sources claim|unverified reports?|conspiracy to|whistleblower claims?|whistleblower leaked|secretly planned)\b',
     r'\b(?:they don\'t want you to know|mainstream media won\'t tell you|secret truth|hidden cure|shocking revelation)\b',
-    r'\b(?:claims? that|alleges? that|purports? to|said without evidence|falsely claimed|viral posts? claim)\b',
+    r'\b(?:claims? that|alleges? that|purports? to|said without evidence|falsely claimed|viral posts? claim|viral rumors? claims?|viral rumors?)\b',
     r'\b(?:mind[-\s]?control|microchips? in vaccines?|5g radiation kills|chem[-\s]?trails|cure all diseases?)\b',
     r'\b(?:hiding truth|destroy economy|shocking|secret plot|sources suggest)\b'
 ]
@@ -39,6 +39,9 @@ FACTUAL_PATTERNS = [
 
 # Contrastive Caveat & Half-Truth Patterns (Claims paired with limitations / missing context)
 CONTRASTIVE_CAVEAT_PATTERNS = [
+    r'\b(?:without (?:scientific|clinical|empirical|medical|official) (?:trials?|validation|testing|evidence|proof|peer[-\s]?review))\b',
+    r'\b(?:unverified (?:miraculous|medical|health|experimental) (?:cures?|treatments?|remedies|results|claims?))\b',
+    r'\b(?:celebrities (?:are )?investing in unverified|celebrities claim miraculous|suggests? rapid results without)\b',
     r'\b(?:but (?:no official data|no official validation|no clinical validation|long[-\s]?term effects? are still unknown|experts warn results vary|viral posts? exaggerate|results vary widely|practical implementation remains uncertain))\b',
     r'\b(?:though no (?:official|scientific|empirical|clinical) (?:validation|evidence|data|proof|endorsement) exists?)\b',
     r'\b(?:yet no (?:official|scientific|empirical) (?:data|evidence|validation|proof) has been released)\b',

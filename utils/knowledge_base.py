@@ -97,6 +97,13 @@ VERIFIED_GROUND_TRUTH = [
         "confidence_boost": 0.45
     },
     {
+        "topic": "Chemical Condensation Trails Hoax",
+        "keywords": ["secret lab", "mind control chemical", "condensation trails", "airliner condensation trails", "manipulate public voting", "chemtrails"],
+        "fact": "Condensation trails from aircraft are harmless ice crystals; claims of government mind-control chemical dispersal are debunked conspiracy theories.",
+        "truth_value": "FAKE",
+        "confidence_boost": 0.45
+    },
+    {
         "topic": "Miracle Cancer Cure Overnight Hoax",
         "keywords": ["cures all cancer in 24 hours", "miracle fruit cures cancer", "doctors hidden cure"],
         "fact": "There is no single miracle cure that eliminates all cancer overnight; such claims are dangerous medical misinformation.",

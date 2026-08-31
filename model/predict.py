@@ -155,14 +155,14 @@ def resolve_hierarchical_decision(
     # -------------------------------------------------------------
     debunk_strength = 0.85 if correction_count >= 1 else 0.0
     if final_label is None and debunk_strength >= 0.40:
-        if correction_count >= claim_count:
+        if correction_count > 0 and claim_count == 0:
             final_label = "REAL (Debunk)"
             confidence = 0.85
-            decision_path.append(f"Layer 2: Gated Fact-Check Passed: {correction_count} refutation(s) >= {claim_count} claim(s).")
+            decision_path.append(f"Layer 2: Dedicated Fact-Check Passed: {correction_count} refutation(s) with zero unverified claims.")
         else:
             final_label = "MISLEADING / PARTIALLY TRUE"
-            confidence = 0.75
-            decision_path.append(f"Layer 2: Mixed debunk signal: unverified claims ({claim_count}) exceed corrections ({correction_count}) -> MISLEADING.")
+            confidence = 0.80
+            decision_path.append(f"Layer 2: Conflicting claim vs refutation signal: {claim_count} claim(s) vs {correction_count} refutation(s) -> MISLEADING.")
 
     # -------------------------------------------------------------
     # LAYER 3: STRONG MIXED SIGNAL & CONTRADICTION RULE
@@ -182,21 +182,7 @@ def resolve_hierarchical_decision(
         decision_path.append(f"Layer 3: Mixed Truth + Rumor: Objective factual assertions ({factual_count}) blended with unverified viral claims ({claim_count}) -> Resolved to MISLEADING.")
 
     # -------------------------------------------------------------
-    # LAYER 4: MISLEADING VS FAKE BOUNDARY & OVERRIDE
-    # -------------------------------------------------------------
-    if final_label is None:
-        # Override FAKE if the text is merely an exaggerated or incomplete truth (lowered threshold to 0.25)
-        if p_fake > 0.60 and (misleading_score >= 0.25 or has_caveat):
-            final_label = "MISLEADING / PARTIALLY TRUE"
-            confidence = max(0.72, misleading_score)
-            decision_path.append(f"Layer 4: Overrode statistical FAKE -> MISLEADING: text contains partial truth or contextual exaggeration (misleading_score={misleading_score:.2f} >= 0.25).")
-        elif ratio > 1.2 and claim_count > 0:
-            final_label = "MISLEADING / PARTIALLY TRUE"
-            confidence = 0.72
-            decision_path.append(f"Layer 4: Claim ratio ({ratio:.2f}) indicates unverified assertions outnumber factual context -> MISLEADING.")
-
-    # -------------------------------------------------------------
-    # LAYER 5: OFFLINE FACTUAL GROUNDING & TRUSTED SOURCE AUTHORITY
+    # LAYER 4: OFFLINE FACTUAL GROUNDING & TRUSTED SOURCE AUTHORITY
     # -------------------------------------------------------------
     if final_label is None and knowledge_info is not None:
         grounded_label = knowledge_info.get("grounded_label")
@@ -204,23 +190,39 @@ def resolve_hierarchical_decision(
         if grounded_label == "REAL":
             final_label = "REAL"
             confidence = 0.95
-            decision_path.append(f"Layer 5: Factual Grounding: Aligns with verified ground truth on '{topic}'.")
+            decision_path.append(f"Layer 4: Factual Grounding: Aligns with verified ground truth on '{topic}'.")
         elif grounded_label == "FAKE":
             final_label = "FAKE"
             confidence = 0.95
-            decision_path.append(f"Layer 5: Known Hoax Registry: Matched debunked hoax pattern on '{topic}'.")
+            decision_path.append(f"Layer 4: Known Hoax Registry: Matched debunked hoax pattern on '{topic}'.")
 
     # High-trust institutional or government press release authority
     if final_label is None and has_trusted and trust_score >= 0.30 and sensationalism <= 0.25:
         final_label = "REAL"
         confidence = 0.90
-        decision_path.append(f"Layer 5: High-trust institutional source authority detected (Trust Score: +{trust_score:.2f}).")
+        decision_path.append(f"Layer 4: High-trust institutional source authority detected (Trust Score: +{trust_score:.2f}).")
 
     # Empirical Research Declarative Fallback (e.g. "Researchers published findings showing ... increased by 15%")
     if final_label is None and factual_count > 0 and claim_count == 0 and sensationalism <= 0.15:
         final_label = "REAL"
         confidence = 0.85
-        decision_path.append(f"Layer 5: Empirical Declarative Finding: Objective research publication with {factual_count} factual statement(s) and zero sensationalism.")
+        decision_path.append(f"Layer 4: Empirical Declarative Finding: Objective research publication with {factual_count} factual statement(s) and zero sensationalism.")
+
+    # -------------------------------------------------------------
+    # LAYER 5: MISLEADING VS FAKE BOUNDARY (Requires Mixed Context or Explicit Caveat)
+    # -------------------------------------------------------------
+    if final_label is None:
+        # Misleading requires an actual counter-signal, caveat, or mixed truth
+        is_mixed_truth_or_caveat = (has_caveat or (factual_count > 0 and claim_count > 0) or (correction_count > 0 and claim_count > 0))
+
+        if p_fake > 0.60 and is_mixed_truth_or_caveat:
+            final_label = "MISLEADING / PARTIALLY TRUE"
+            confidence = max(0.75, misleading_score)
+            decision_path.append(f"Layer 5: Overrode statistical FAKE -> MISLEADING: text contains partial truth, limitation, or caveat clause.")
+        elif ratio > 1.2 and claim_count > 0 and factual_count > 0:
+            final_label = "MISLEADING / PARTIALLY TRUE"
+            confidence = 0.72
+            decision_path.append(f"Layer 5: Claim ratio ({ratio:.2f}) indicates claims outnumber factual context -> MISLEADING.")
 
     # -------------------------------------------------------------
     # LAYER 6: CALIBRATED STATISTICAL MODEL PROBABILITY
