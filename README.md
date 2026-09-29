@@ -5,7 +5,7 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.3%2B-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Accuracy](https://img.shields.io/badge/Test%20Accuracy-99.40%25-brightgreen)](model/metrics.json)
+[![Accuracy](https://img.shields.io/badge/Group--Safe%20Accuracy-98.67%25-brightgreen)](model/metrics.json)
 
 An end-to-end Machine Learning and Natural Language Processing (NLP) system designed to detect and classify news articles across multi-class nuances: **REAL**, **FAKE**, **MISLEADING / PARTIALLY TRUE**, and **REAL (Debunk)**.
 
@@ -144,25 +144,41 @@ Open **[http://localhost:8501](http://localhost:8501)** in your browser.
 
 ---
 
-## 🔬 Model Performance & Benchmarks
+## 🔬 Model Performance & Anti-Leakage Benchmarks
 
-Evaluated on a balanced **51,398-article multi-domain dataset** (ISOT, Reuters, Science/Tech, Economics, Health):
+To address dataset duplication and publisher watermark leakage, the training pipeline incorporates:
+1. **Pre-Split Deduplication**: Removed **5,800 duplicate rows (11.28%)** prior to splitting, producing **45,598 unique articles**.
+2. **Wire Dateline & Watermark Sanitization**: Stripped wire agency datelines (`(Reuters) -`, `(AP)`) and publisher footers (`Via: Breitbart`, `Via: Gateway Pundit`) so the model evaluates semantic credibility rather than source signatures.
+3. **Group-Safe Story Splitting**: Syndicated story variants are grouped together using title clustering to guarantee **0% story cross-contamination** between train (36,348 samples) and test (9,250 samples).
 
-| Metric                 |    Score     | Definition                                                 |
-| :--------------------- | :----------: | :--------------------------------------------------------- |
-| ⚡ **Global Accuracy** | **`99.40%`** | Total correct predictions across 10,280 holdout samples    |
-| 🎯 **Macro Precision** | **`99.58%`** | Purity of positive detections across each category         |
-| 🔄 **Macro Recall**    | **`99.58%`** | True positive catch rate across deceptive & nuanced claims |
-| 📊 **Macro F1-Score**  | **`99.58%`** | Harmonic balance across minority & majority classes        |
+### Verified Holdout Evaluation (9,250 Out-of-Story Samples):
+
+| Metric                     |    Score     | Definition                                                       |
+| :------------------------- | :----------: | :--------------------------------------------------------------- |
+| ⚡ **Group-Safe Accuracy**  | **`98.67%`** | Overall verification rate on held-out unseen news stories        |
+| ⚖️ **Balanced Accuracy**    | **`99.03%`** | Average recall weighted evenly across all 3 classes              |
+| 🎯 **Macro Precision**     | **`99.01%`** | Average positive purity across each prediction category          |
+| 🔄 **Macro Recall**        | **`99.03%`** | Deceptive & nuanced claim detection catch rate                   |
+| 📊 **Macro F1-Score**      | **`99.02%`** | Harmonic balance across minority and majority classes            |
+| 📈 **Multi-Class ROC-AUC** | **`0.9992`** | One-vs-Rest class discrimination area under the curve            |
+
+### Detailed Per-Class Breakdown:
+
+| Category                     | Precision | Recall (Sensitivity) | F1-Score | Holdout Support |
+| :--------------------------- | :-------: | :------------------: | :------: | :-------------: |
+| 🔴 **FAKE**                  | `98.15%`  |       `98.40%`       | `98.28%` |      3,562      |
+| ⚠️ **MISLEADING**            | `100.00%` |      `100.00%`       | `100.0%` |       607       |
+| 🟢 **REAL**                  | `98.88%`  |       `98.70%`       | `98.79%` |      5,081      |
 
 ### Multi-Class Confusion Matrix (Predicted vs Actual):
 
-| Actual Label \ Predicted Label |   FAKE    | MISLEADING | REAL (Debunk) |   REAL    |
-| :----------------------------- | :-------: | :--------: | :-----------: | :-------: |
-| **REAL**                       |    52     |     12     |      18       | **4,850** |
-| **REAL (Debunk)**              |    15     |     8      |    **380**    |    25     |
-| **MISLEADING**                 |    18     |  **475**   |       4       |    12     |
-| **FAKE**                       | **4,580** |     16     |       2       |    48     |
+| Actual Class \ Predicted Class |   FAKE    | MISLEADING |   REAL    |
+| :----------------------------- | :-------: | :--------: | :-------: |
+| **FAKE**                       | **3,505** |     0      |    57     |
+| **MISLEADING**                 |     0     |  **607**   |     0     |
+| **REAL**                       |    66     |     0      | **5,015** |
+
+> ℹ️ **Operational Scope Note:** The statistical ML model evaluates *linguistic deception patterns, stylistic anomalies, and sensationalism*. For evolving real-world news, truth classification is performed in synergy with deterministic fact-checking refutations, contrastive caveat parsing, and offline verified knowledge grounding.
 
 ---
 
