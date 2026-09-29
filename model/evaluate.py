@@ -112,48 +112,29 @@ def create_performance_summary_fig():
 def create_confusion_matrix_fig(cm_matrix=None):
     """
     Creates the comprehensive high-contrast Multi-Class Confusion Matrix Heatmap.
-    Covers all classes: REAL, REAL (Debunk), MISLEADING, FAKE.
+    Dynamically renders from evaluated metrics.json.
     """
     metrics = load_metrics() or {}
-    raw_cm = metrics.get('confusion_matrix', [[4630, 0, 66], [0, 500, 0], [52, 0, 5032]])
-
-    # Comprehensive 4-class mapping
-    # Actual classes: REAL, REAL (Debunk), MISLEADING, FAKE
-    # Predicted classes: FAKE, MISLEADING, REAL (Debunk), REAL
-    
-    # Derive balanced 4-class distribution from evaluated dataset
-    fake_tot = raw_cm[0][0] + raw_cm[0][2]
-    real_tot = raw_cm[2][0] + raw_cm[2][2]
-    mis_tot = raw_cm[1][1] if len(raw_cm) > 1 else 500
-
-    z_data = [
-        [52, 12, 18, 4850],   # Actual REAL
-        [15, 8, 380, 25],     # Actual REAL (Debunk)
-        [18, 475, 4, 12],     # Actual MISLEADING
-        [4580, 16, 2, 48]     # Actual FAKE
-    ]
-    
-    y_labels = ['REAL', 'REAL (Debunk)', 'MISLEADING', 'FAKE']
-    x_labels = ['FAKE', 'MISLEADING', 'REAL (Debunk)', 'REAL']
+    raw_cm = cm_matrix or metrics.get('confusion_matrix', [[3505, 0, 57], [0, 607, 0], [66, 0, 5015]])
+    labels = metrics.get('unique_labels', ['FAKE', 'MISLEADING', 'REAL'])
 
     fig = go.Figure(data=go.Heatmap(
-        z=z_data,
-        x=x_labels,
-        y=y_labels,
+        z=raw_cm,
+        x=labels,
+        y=labels,
         colorscale=[
             [0.0, '#130924'],
-            [0.02, '#1E0B38'],
-            [0.08, '#4C1D95'],
-            [0.35, '#06B6D4'],   # Cyan for Debunk/Misleading
-            [0.70, '#84CC16'],   # Green for FAKE
-            [1.0, '#FACC15']     # Yellow for high REAL
+            [0.05, '#1E0B38'],
+            [0.20, '#4C1D95'],
+            [0.50, '#06B6D4'],   # Cyan
+            [0.80, '#84CC16'],   # Green
+            [1.0, '#FACC15']     # Yellow
         ],
-        text=z_data,
-        texttemplate="<b>%{text}</b>",
+        text=raw_cm,
+        texttemplate="<b>%{text:,}</b>",
         textfont={"size": 15, "family": "Plus Jakarta Sans, sans-serif", "color": "#FFFFFF"},
         showscale=True,
         colorbar=dict(
-            tickvals=[0, 500, 1500, 3000, 4800],
             tickfont=dict(color="#94A3B8", size=10),
             thickness=12,
             len=0.9
@@ -164,12 +145,12 @@ def create_confusion_matrix_fig(cm_matrix=None):
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         xaxis=dict(
-            title=dict(text="<b>Predicted Label</b>", font=dict(color="#94A3B8", size=12)),
+            title=dict(text="<b>Predicted Class</b>", font=dict(color="#94A3B8", size=12)),
             tickfont=dict(color="#CBD5E1", size=11, family="Plus Jakarta Sans, sans-serif"),
             showgrid=False
         ),
         yaxis=dict(
-            title=dict(text="<b>Actual Label</b>", font=dict(color="#94A3B8", size=12)),
+            title=dict(text="<b>Actual Ground Truth</b>", font=dict(color="#94A3B8", size=12)),
             tickfont=dict(color="#CBD5E1", size=11, family="Plus Jakarta Sans, sans-serif"),
             showgrid=False,
             autorange='reversed'
