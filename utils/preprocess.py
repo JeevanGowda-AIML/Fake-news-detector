@@ -29,10 +29,36 @@ _stop_words = _default_stopwords - _negation_words
 
 _lemmatizer = WordNetLemmatizer()
 
+def strip_publisher_watermarks(text: str) -> str:
+    """
+    Comprehensive publisher, agency dateline, and attribution sanitizer.
+    Eliminates shortcuts like 'Reuters', 'Via: Breitbart', and wire tags
+    to prevent machine learning models from learning source bias rather than content veracity.
+    """
+    if not isinstance(text, str) or not text.strip():
+        return ""
+
+    t = text
+    # 1. Wire Datelines: "WASHINGTON (Reuters) -", "NEW YORK (AP) —"
+    t = re.sub(r'^(?:[A-Z\s,]{2,40}\s*)?\((?:Reuters|AP|AFP|Bloomberg|CNN|Fox News|BBC)\)\s*[-–—:]+\s*', '', t, flags=re.IGNORECASE)
+    # 2. Bracketed/parenthetical agency markers
+    t = re.sub(r'[\(\[]\s*(?:Reuters|Associated Press|AP|AFP|Bloomberg|CNN|Fox News|Breitbart|Infowars)\s*[\)\]]', '', t, flags=re.IGNORECASE)
+    # 3. Trailing/inline web attribution signatures
+    t = re.sub(r'\b(?:via:?|source:?|h/t:?|read more:?)\s+[A-Za-z0-9\s\.\-_&]+$', '', t, flags=re.IGNORECASE | re.MULTILINE)
+    t = re.sub(r'\b(?:via|h/t)\s*[:\-]?\s*(?:Breitbart|Gateway Pundit|Daily Caller|InfoWars|Judicial Watch|Weasel Zippers|Daily Mail|WND|RT|Zero Hedge|The Blaze|True Pundit|Conservative Treehouse)\b.*', '', t, flags=re.IGNORECASE)
+    # 4. URLs and social links
+    t = re.sub(r'https?://\S+|www\.\S+', '', t)
+    t = re.sub(r'pic\.twitter\.com/\S+|twitter\.com/\S+', '', t)
+    t = re.sub(r'\[(?:Video|VIDEO|WATCH|Watch|Graphic Video)\]', '', t)
+    # 5. Publisher brand tokens
+    t = re.sub(r'\b(?:reuters|breitbart news|gateway pundit|daily caller|infowars|judicial watch|weasel zippers)\b', '', t, flags=re.IGNORECASE)
+    return t.strip()
+
+
 def clean_text(text: str, remove_stopwords: bool = True, lemmatize: bool = True) -> str:
     """
     Robust NLP text cleaning pipeline:
-    1. Strip news agency datelines (e.g., 'WASHINGTON (Reuters) -', '(AP)', 'via Getty')
+    1. Strip news agency datelines & publisher watermarks
     2. Lowercase text
     3. Strip HTML tags, URLs, and emails
     4. Remove numbers and punctuation (except alpha characters and spaces)
@@ -44,9 +70,7 @@ def clean_text(text: str, remove_stopwords: bool = True, lemmatize: bool = True)
         return ""
 
     # 1. Strip publisher datelines & agency/web artifacts (prevents memorizing 'Reuters', 'Getty', etc.)
-    text_stripped = re.sub(r'^[A-Z\s,]{2,35}\s*\([A-Za-z\s\.,]+\)\s*[-–—:]\s*', '', text)
-    text_stripped = re.sub(r'\(Reuters\)|via Getty Images|\(AP\)|Associated Press|Reuters -|featured image|image via|pic\.twitter\.com/\S+|twitter\.com/\S+|read more at\b', '', text_stripped, flags=re.IGNORECASE)
-    text_stripped = re.sub(r'\breuters\b', '', text_stripped, flags=re.IGNORECASE)
+    text_stripped = strip_publisher_watermarks(text)
 
     # 2. Lowercase
     text_lower = text_stripped.lower()
