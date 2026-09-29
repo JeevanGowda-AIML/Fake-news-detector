@@ -1,48 +1,54 @@
 {
-  "accuracy": 0.994,
-  "precision": 0.9958,
-  "recall": 0.9958,
-  "f1_score": 0.9958,
-  "macro_precision": 0.9958,
-  "macro_recall": 0.9958,
-  "macro_f1": 0.9958,
+  "accuracy": 0.9867,
+  "balanced_accuracy": 0.9903,
+  "precision": 0.9901,
+  "recall": 0.9903,
+  "f1_score": 0.9902,
+  "macro_precision": 0.9901,
+  "macro_recall": 0.9903,
+  "macro_f1": 0.9902,
+  "weighted_f1": 0.9867,
+  "roc_auc": 0.9992,
   "class_metrics": {
     "FAKE": {
-      "precision": 0.993,
-      "recall": 0.9938,
-      "f1_score": 0.9934
+      "precision": 0.9815,
+      "recall": 0.984,
+      "f1_score": 0.9828,
+      "support": 3562
     },
     "MISLEADING": {
       "precision": 1.0,
       "recall": 1.0,
-      "f1_score": 1.0
+      "f1_score": 1.0,
+      "support": 607
     },
     "REAL": {
-      "precision": 0.9943,
-      "recall": 0.9935,
-      "f1_score": 0.9939
+      "precision": 0.9888,
+      "recall": 0.987,
+      "f1_score": 0.9879,
+      "support": 5081
     }
   },
-  "cv_5fold_accuracy_mean": 0.9934,
-  "cv_5fold_accuracy_std": 0.0008,
-  "cv_5fold_precision_mean": 0.9949,
-  "cv_5fold_recall_mean": 0.9947,
-  "cv_5fold_f1_mean": 0.9948,
+  "cv_5fold_accuracy_mean": 0.9867,
+  "cv_5fold_accuracy_std": 0.0012,
+  "cv_5fold_precision_mean": 0.9901,
+  "cv_5fold_recall_mean": 0.9903,
+  "cv_5fold_f1_mean": 0.9902,
   "confusion_matrix": [
     [
-      4667,
+      3505,
       0,
-      29
+      57
     ],
     [
       0,
-      500,
+      607,
       0
     ],
     [
-      33,
+      66,
       0,
-      5051
+      5015
     ]
   ],
   "unique_labels": [
@@ -51,11 +57,15 @@
     "REAL"
   ],
   "balanced_class_weights": {
-    "FAKE": 0.7296,
-    "MISLEADING": 6.853,
-    "REAL": 0.6741
+    "FAKE": 0.8449,
+    "MISLEADING": 6.4004,
+    "REAL": 0.6023
   },
-  "total_samples": 51398,
-  "train_samples": 41118,
-  "test_samples": 10280
+  "total_raw_samples": 51398,
+  "duplicates_removed": 5800,
+  "deduped_total_samples": 45598,
+  "train_samples": 36348,
+  "test_samples": 9250,
+  "split_type": "GroupShuffleSplit (Syndicated Story Clustering, 0% overlap)",
+  "watermark_sanitization": true
 }
