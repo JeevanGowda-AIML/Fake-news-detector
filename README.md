@@ -147,28 +147,29 @@ Open **[http://localhost:8501](http://localhost:8501)** in your browser.
 ## 🔬 Model Performance & Anti-Leakage Benchmarks
 
 To address dataset duplication and publisher watermark leakage, the training pipeline incorporates:
+
 1. **Pre-Split Deduplication**: Removed **5,800 duplicate rows (11.28%)** prior to splitting, producing **45,598 unique articles**.
 2. **Wire Dateline & Watermark Sanitization**: Stripped wire agency datelines (`(Reuters) -`, `(AP)`) and publisher footers (`Via: Breitbart`, `Via: Gateway Pundit`) so the model evaluates semantic credibility rather than source signatures.
 3. **Group-Safe Story Splitting**: Syndicated story variants are grouped together using title clustering to guarantee **0% story cross-contamination** between train (36,348 samples) and test (9,250 samples).
 
 ### Verified Holdout Evaluation (9,250 Out-of-Story Samples):
 
-| Metric                     |    Score     | Definition                                                       |
-| :------------------------- | :----------: | :--------------------------------------------------------------- |
-| ⚡ **Group-Safe Accuracy**  | **`98.67%`** | Overall verification rate on held-out unseen news stories        |
-| ⚖️ **Balanced Accuracy**    | **`99.03%`** | Average recall weighted evenly across all 3 classes              |
-| 🎯 **Macro Precision**     | **`99.01%`** | Average positive purity across each prediction category          |
-| 🔄 **Macro Recall**        | **`99.03%`** | Deceptive & nuanced claim detection catch rate                   |
-| 📊 **Macro F1-Score**      | **`99.02%`** | Harmonic balance across minority and majority classes            |
-| 📈 **Multi-Class ROC-AUC** | **`0.9992`** | One-vs-Rest class discrimination area under the curve            |
+| Metric                     |    Score     | Definition                                                |
+| :------------------------- | :----------: | :-------------------------------------------------------- |
+| ⚡ **Group-Safe Accuracy** | **`98.67%`** | Overall verification rate on held-out unseen news stories |
+| ⚖️ **Balanced Accuracy**   | **`99.03%`** | Average recall weighted evenly across all 3 classes       |
+| 🎯 **Macro Precision**     | **`99.01%`** | Average positive purity across each prediction category   |
+| 🔄 **Macro Recall**        | **`99.03%`** | Deceptive & nuanced claim detection catch rate            |
+| 📊 **Macro F1-Score**      | **`99.02%`** | Harmonic balance across minority and majority classes     |
+| 📈 **Multi-Class ROC-AUC** | **`0.9992`** | One-vs-Rest class discrimination area under the curve     |
 
 ### Detailed Per-Class Breakdown:
 
-| Category                     | Precision | Recall (Sensitivity) | F1-Score | Holdout Support |
-| :--------------------------- | :-------: | :------------------: | :------: | :-------------: |
-| 🔴 **FAKE**                  | `98.15%`  |       `98.40%`       | `98.28%` |      3,562      |
-| ⚠️ **MISLEADING**            | `100.00%` |      `100.00%`       | `100.0%` |       607       |
-| 🟢 **REAL**                  | `98.88%`  |       `98.70%`       | `98.79%` |      5,081      |
+| Category          | Precision | Recall (Sensitivity) | F1-Score | Holdout Support |
+| :---------------- | :-------: | :------------------: | :------: | :-------------: |
+| 🔴 **FAKE**       | `98.15%`  |       `98.40%`       | `98.28%` |      3,562      |
+| ⚠️ **MISLEADING** | `100.00%` |      `100.00%`       | `100.0%` |       607       |
+| 🟢 **REAL**       | `98.88%`  |       `98.70%`       | `98.79%` |      5,081      |
 
 ### Multi-Class Confusion Matrix (Predicted vs Actual):
 
@@ -178,7 +179,7 @@ To address dataset duplication and publisher watermark leakage, the training pip
 | **MISLEADING**                 |     0     |  **607**   |     0     |
 | **REAL**                       |    66     |     0      | **5,015** |
 
-> ℹ️ **Operational Scope Note:** The statistical ML model evaluates *linguistic deception patterns, stylistic anomalies, and sensationalism*. For evolving real-world news, truth classification is performed in synergy with deterministic fact-checking refutations, contrastive caveat parsing, and offline verified knowledge grounding.
+> ℹ️ **Operational Scope Note:** The statistical ML model evaluates _linguistic deception patterns, stylistic anomalies, and sensationalism_. For evolving real-world news, truth classification is performed in synergy with deterministic fact-checking refutations, contrastive caveat parsing, and offline verified knowledge grounding.
 
 ---
 
